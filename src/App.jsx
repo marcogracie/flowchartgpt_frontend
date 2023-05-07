@@ -107,6 +107,7 @@ function App() {
           display: "flex",
           flexDirection: "column",
           minHeight: "100vh",
+          bgcolor: (theme) => theme.palette.background.default
         }}
       >
         <AppBar position="static" sx={{ borderRadius: "0px 0px 25px 25px" }}>
@@ -124,22 +125,22 @@ function App() {
             />
           </Toolbar>
         </AppBar>
-        <Grid container sx={{ flexGrow: 1, p: 2 }}>
+        <Grid container sx={{ height: "calc(100vh - 56px)", p: 2 }}>
           <Grid item xs={12} md={3}>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
-                height: "100%",
+                flexGrow: 1,
                 gap: 2,
               }}
             >
               <Paper
                 variant="outlined"
                 sx={{
-                  flexGrow: 1,
+                  maxHeight: "calc(100vh - 210px)",
                   p: 2,
-                  overflowY: "scroll",
+                  overflowY: "auto",
                   "&::-webkit-scrollbar": {
                     width: "0.4em",
                   },
