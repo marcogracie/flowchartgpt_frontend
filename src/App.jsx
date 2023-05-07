@@ -64,8 +64,6 @@ function DarkModeToggle({ darkMode, toggleDarkMode }) {
   );
 }
 
-
-
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   //const [messages, setMessages] = useState([]);
@@ -81,7 +79,6 @@ function App() {
     { sender: "api", content: "Absolutely! Please provide some details." },
   ];
 
-  
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
   const theme = createTheme({
@@ -127,32 +124,62 @@ function App() {
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
-                overflowY: "auto",
                 gap: 2,
               }}
             >
-                {messages.map((message, index) => (
-                <Card
-                  key={index}
-                  sx={{
-                    alignSelf:
-                      message.sender === "user" ? "flex-end" : "flex-start",
-                    maxWidth: "80%",
-                    bgcolor:
-                      message.sender === "user"
-                        ? "primary.main"
-                        : "secondary.main",
-                    color:
-                      message.sender === "user"
-                        ? "common.white"
-                        : "common.black",
-                  }}
-                >
-                  <CardContent>
-                    <Typography variant="body1">{message.content}</Typography>
-                  </CardContent>
-                </Card>
-                ))}
+              <Paper
+                variant="outlined"
+                sx={{
+                  flexGrow: 1,
+                  p: 2,
+                  overflowY: "scroll",
+                  "&::-webkit-scrollbar": {
+                    width: "0.4em",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    borderRadius: "4px",
+                    backgroundColor: theme.palette.grey[500],
+                  },
+                }}
+              >
+                <Box>
+                  {messages.map((message, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        justifyContent:
+                          message.sender === "user" ? "flex-end" : "flex-start",
+                      }}
+                    >
+                      <Card
+                        sx={{
+                          maxWidth: "80%",
+                          borderRadius:
+                            message.sender === "user"
+                              ? "30px 30px 0px 30px"
+                              : "30px 30px 30px 0px",
+                          bgcolor:
+                            message.sender === "user"
+                              ? "primary.main"
+                              : "secondary.main",
+                          color:
+                            message.sender === "user"
+                              ? "common.white"
+                              : "common.black",
+                          mb: 1,
+                        }}
+                      >
+                        <CardContent>
+                          <Typography variant="body1">
+                            {message.content}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Box>
+                  ))}
+                </Box>
+              </Paper>
               <Box
                 component="form"
                 sx={{
