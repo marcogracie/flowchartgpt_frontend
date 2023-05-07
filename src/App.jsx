@@ -85,6 +85,9 @@ function App() {
       <Box
         sx={{
           flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "100vh"
         }}
       >
         <AppBar position="static" sx={{ borderRadius: "0px 0px 25px 25px" }}>
@@ -102,8 +105,10 @@ function App() {
             />
           </Toolbar>
         </AppBar>
+        <Grid container sx={{ flexGrow: 1, p: 2}}>
+          <Grid item xs={12} md={3}>
         <Box
-          sx={{ flexGrow: 1, p: 2, display: "flex", flexDirection: "column" }}
+          sx={{display: "flex", flexDirection: "column", height: "100%" }}
         >
           <Paper
             variant="outlined"
@@ -158,6 +163,9 @@ function App() {
             </IconButton>
           </Box>
         </Box>
+      </Grid>
+      <Grid item xs={12} md={9}></Grid>
+      </Grid>
       </Box>
     </ThemeProvider>
   );
