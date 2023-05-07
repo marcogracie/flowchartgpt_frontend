@@ -11,7 +11,9 @@ import {
   SvgIcon,
   TextField,
   IconButton,
-  Grid
+  Grid,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { styled } from "@mui/system";
@@ -62,11 +64,24 @@ function DarkModeToggle({ darkMode, toggleDarkMode }) {
   );
 }
 
+
+
 function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const [messages, setMessages] = useState([]);
+  //const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
+  const messages = [
+    { sender: "user", content: "Hello, I need help with a flowchart." },
+    {
+      sender: "api",
+      content: "Sure, I'd be happy to help. What do you need help with?",
+    },
+    { sender: "user", content: "Can you help me create a simple flowchart?" },
+    { sender: "api", content: "Absolutely! Please provide some details." },
+  ];
+
+  
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
   const theme = createTheme({
@@ -87,7 +102,7 @@ function App() {
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",
-          minHeight: "100vh"
+          minHeight: "100vh",
         }}
       >
         <AppBar position="static" sx={{ borderRadius: "0px 0px 25px 25px" }}>
@@ -105,67 +120,72 @@ function App() {
             />
           </Toolbar>
         </AppBar>
-        <Grid container sx={{ flexGrow: 1, p: 2}}>
+        <Grid container sx={{ flexGrow: 1, p: 2 }}>
           <Grid item xs={12} md={3}>
-        <Box
-          sx={{display: "flex", flexDirection: "column", height: "100%" }}
-        >
-          <Paper
-            variant="outlined"
-            sx={{
-              flexGrow: 1,
-              p: 2,
-              overflowY: "scroll",
-              "&: :-webkit-scrollbar": {
-                width: "0.4em",
-              },
-              "&: :-webkit-scrollbar-thumb": {
-                borderRadius: "4px",
-                backgroundColor: theme.palette.grey[500],
-              },
-            }}
-          >
-            <List>
-              {messages.map((message, index) => (
-                <ListItem key={index}>
-                  <ListItemText primary={message} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-          <Box
-            component="form"
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              mt: 2,
-            }}
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage();
-            }}
-          >
-            <TextField
-              fullWidth
-              label="Message"
-              variant="outlined"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
-            <IconButton
-              type="submit"
-              color="primary"
-              disabled={!input.trim()}
-              sx={{ m1: 1 }}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                overflowY: "auto",
+                gap: 2,
+              }}
             >
-              <SendIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      </Grid>
-      <Grid item xs={12} md={9}></Grid>
-      </Grid>
+                {messages.map((message, index) => (
+                <Card
+                  key={index}
+                  sx={{
+                    alignSelf:
+                      message.sender === "user" ? "flex-end" : "flex-start",
+                    maxWidth: "80%",
+                    bgcolor:
+                      message.sender === "user"
+                        ? "primary.main"
+                        : "secondary.main",
+                    color:
+                      message.sender === "user"
+                        ? "common.white"
+                        : "common.black",
+                  }}
+                >
+                  <CardContent>
+                    <Typography variant="body1">{message.content}</Typography>
+                  </CardContent>
+                </Card>
+                ))}
+              <Box
+                component="form"
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  mt: 2,
+                }}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  sendMessage();
+                }}
+              >
+                <TextField
+                  fullWidth
+                  label="Message"
+                  variant="outlined"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                />
+                <IconButton
+                  type="submit"
+                  color="primary"
+                  disabled={!input.trim()}
+                  sx={{ m1: 1 }}
+                >
+                  <SendIcon />
+                </IconButton>
+              </Box>
+            </Box>
+          </Grid>
+          <Grid item xs={12} md={9}></Grid>
+        </Grid>
       </Box>
     </ThemeProvider>
   );
