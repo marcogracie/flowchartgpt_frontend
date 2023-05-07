@@ -3,14 +3,21 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Switch,
   Box,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
   SvgIcon,
+  TextField,
+  IconButton,
+  Grid
 } from "@mui/material";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { styled } from "@mui/system";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import NightsStayIcon from "@mui/icons-material/NightsStay";
+import SendIcon from "@mui/icons-material/Send";
 
 const CustomToggle = styled("div")({
   display: "flex",
@@ -49,7 +56,7 @@ function DarkModeToggle({ darkMode, toggleDarkMode }) {
       style={{ color: theme.palette.primary.light }}
     >
       <CustomThumb style={{ left: thumbPosition }}>
-        <SvgIcon component={ThumbIcon} style={{ color: iconColor}} />
+        <SvgIcon component={ThumbIcon} style={{ color: iconColor }} />
       </CustomThumb>
     </CustomToggle>
   );
@@ -57,6 +64,8 @@ function DarkModeToggle({ darkMode, toggleDarkMode }) {
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -66,6 +75,11 @@ function App() {
     },
   });
 
+  const sendMessage = () => {
+    setMessages([...messages, input]);
+    setInput("");
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -73,7 +87,7 @@ function App() {
           flexGrow: 1,
         }}
       >
-        <AppBar position="static" sx={{borderRadius: "0px 0px 25px 25px"}}>
+        <AppBar position="static" sx={{ borderRadius: "0px 0px 25px 25px" }}>
           <Toolbar>
             <Typography
               variant="h6"
@@ -88,6 +102,62 @@ function App() {
             />
           </Toolbar>
         </AppBar>
+        <Box
+          sx={{ flexGrow: 1, p: 2, display: "flex", flexDirection: "column" }}
+        >
+          <Paper
+            variant="outlined"
+            sx={{
+              flexGrow: 1,
+              p: 2,
+              overflowY: "scroll",
+              "&: :-webkit-scrollbar": {
+                width: "0.4em",
+              },
+              "&: :-webkit-scrollbar-thumb": {
+                borderRadius: "4px",
+                backgroundColor: theme.palette.grey[500],
+              },
+            }}
+          >
+            <List>
+              {messages.map((message, index) => (
+                <ListItem key={index}>
+                  <ListItemText primary={message} />
+                </ListItem>
+              ))}
+            </List>
+          </Paper>
+          <Box
+            component="form"
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              mt: 2,
+            }}
+            onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage();
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Message"
+              variant="outlined"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <IconButton
+              type="submit"
+              color="primary"
+              disabled={!input.trim()}
+              sx={{ m1: 1 }}
+            >
+              <SendIcon />
+            </IconButton>
+          </Box>
+        </Box>
       </Box>
     </ThemeProvider>
   );
