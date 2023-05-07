@@ -77,6 +77,13 @@ function App() {
     },
     { sender: "user", content: "Can you help me create a simple flowchart?" },
     { sender: "api", content: "Absolutely! Please provide some details." },
+    { sender: "user", content: "Hello, I need help with a flowchart." },
+    {
+      sender: "api",
+      content: "Sure, I'd be happy to help. What do you need help with?",
+    },
+    { sender: "user", content: "Can you help me create a simple flowchart?" },
+    { sender: "api", content: "Absolutely! Please provide some details." },
   ];
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
