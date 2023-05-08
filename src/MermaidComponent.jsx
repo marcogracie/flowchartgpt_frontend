@@ -1,21 +1,10 @@
-import React, { useEffect, useRef } from "react";
-import mermaid from "mermaid";
+import React from 'react';
+import Mermaid from 'react-mermaid2';
 
 const MermaidComponent = ({ chart }) => {
-  const chartRef = useRef();
-
-  useEffect(() => {
-    if (chartRef.current) {
-      mermaid.initialize({ startOnLoad: true, theme: "default" });
-      mermaid.render("mermaidChart", chart, (svgCode) => {
-        chartRef.current.innerHTML = svgCode;
-      });
-    }
-  }, [chart]);
-
   return (
     <div>
-      <div ref={chartRef} />
+      <Mermaid chart={chart} />
     </div>
   );
 };

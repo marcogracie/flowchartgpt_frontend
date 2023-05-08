@@ -3,13 +3,20 @@ import { Box, Grid } from "@mui/material";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import TopBar from "./TopBar";
 import ChatBox from "./ChatBox";
+import MermaidComponent from "./MermaidComponent";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [chart, setChart] = useState(`graph LR
+  A[Square Rect] -- Link text --> B((Circle))
+  A --> C(Round Rect)
+  B --> D{Rhombus}
+  C --> D`);
+
 
   const addMesssage = (newMessage) => {
-    setMessages([...messages, {sender: "user", content: newMessage}]);
+    setMessages([...messages, { sender: "user", content: newMessage }]);
   };
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
@@ -37,7 +44,9 @@ function App() {
           <Grid item xs={12} md={3}>
             <ChatBox messages={messages} onSendMessage={addMesssage} />
           </Grid>
-          {/* ... */}
+          <Grid item xs={12} md={9}>
+            <MermaidComponent chart={chart} />
+          </Grid>
         </Grid>
       </Box>
     </ThemeProvider>
