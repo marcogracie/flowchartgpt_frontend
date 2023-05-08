@@ -1,90 +1,16 @@
 import { useState } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  Paper,
-  List,
-  ListItem,
-  ListItemText,
-  SvgIcon,
-  TextField,
-  IconButton,
-  Grid,
-  Card,
-  CardContent,
-} from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
-import { styled } from "@mui/system";
-import WbSunnyIcon from "@mui/icons-material/WbSunny";
-import NightsStayIcon from "@mui/icons-material/NightsStay";
-import SendIcon from "@mui/icons-material/Send";
-
-const CustomToggle = styled("div")({
-  display: "flex",
-  alignItems: "center",
-  width: 53,
-  height: 34,
-  borderRadius: 17,
-  backgroundColor: "currentColor",
-  padding: "0 4px",
-  position: "relative",
-  cursor: "pointer",
-});
-
-const CustomThumb = styled("div")({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 29,
-  height: 29,
-  borderRadius: "50%",
-  backgroundColor: "white",
-  boxShadow: "none",
-  position: "absolute",
-});
-
-function DarkModeToggle({ darkMode, toggleDarkMode }) {
-  const theme = useTheme();
-
-  const ThumbIcon = darkMode ? NightsStayIcon : WbSunnyIcon;
-  const thumbPosition = darkMode ? "calc(100% - 28px)" : "2px";
-  const iconColor = darkMode ? "black" : "inherit";
-
-  return (
-    <CustomToggle
-      onClick={toggleDarkMode}
-      style={{ color: theme.palette.primary.light }}
-    >
-      <CustomThumb style={{ left: thumbPosition }}>
-        <SvgIcon component={ThumbIcon} style={{ color: iconColor }} />
-      </CustomThumb>
-    </CustomToggle>
-  );
-}
+import TopBar from "./TopBar";
+import ChatBox from "./ChatBox";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
-  //const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
 
-  const messages = [
-    { sender: "user", content: "Hello, I need help with a flowchart." },
-    {
-      sender: "api",
-      content: "Sure, I'd be happy to help. What do you need help with?",
-    },
-    { sender: "user", content: "Can you help me create a simple flowchart?" },
-    { sender: "api", content: "Absolutely! Please provide some details." },
-    { sender: "user", content: "Hello, I need help with a flowchart." },
-    {
-      sender: "api",
-      content: "Sure, I'd be happy to help. What do you need help with?",
-    },
-    { sender: "user", content: "Can you help me create a simple flowchart?" },
-    { sender: "api", content: "Absolutely! Please provide some details." },
-  ];
+  const addMesssage = (newMessage) => {
+    setMessages([...messages, {sender: "user", content: newMessage}]);
+  };
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -94,11 +20,6 @@ function App() {
     },
   });
 
-  const sendMessage = () => {
-    setMessages([...messages, input]);
-    setInput("");
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -107,119 +28,16 @@ function App() {
           display: "flex",
           flexDirection: "column",
           minHeight: "100vh",
-          bgcolor: (theme) => theme.palette.background.default
+          bgcolor: (theme) => theme.palette.background.default,
         }}
       >
-        <AppBar position="static" sx={{ borderRadius: "0px 0px 25px 25px" }}>
-          <Toolbar>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, textAlign: "center" }}
-            >
-              FlowChart GPT
-            </Typography>
-            <DarkModeToggle
-              darkMode={darkMode}
-              toggleDarkMode={toggleDarkMode}
-            />
-          </Toolbar>
-        </AppBar>
+        {" "}
+        <TopBar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
         <Grid container sx={{ height: "calc(100vh - 56px)", p: 2 }}>
           <Grid item xs={12} md={3}>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                flexGrow: 1,
-                gap: 2,
-              }}
-            >
-              <Paper
-                variant="outlined"
-                sx={{
-                  maxHeight: "calc(100vh - 210px)",
-                  p: 2,
-                  overflowY: "auto",
-                  "&::-webkit-scrollbar": {
-                    width: "0.4em",
-                  },
-                  "&::-webkit-scrollbar-thumb": {
-                    borderRadius: "4px",
-                    backgroundColor: theme.palette.grey[500],
-                  },
-                }}
-              >
-                <Box>
-                  {messages.map((message, index) => (
-                    <Box
-                      key={index}
-                      sx={{
-                        display: "flex",
-                        justifyContent:
-                          message.sender === "user" ? "flex-end" : "flex-start",
-                      }}
-                    >
-                      <Card
-                        sx={{
-                          maxWidth: "80%",
-                          borderRadius:
-                            message.sender === "user"
-                              ? "30px 30px 0px 30px"
-                              : "30px 30px 30px 0px",
-                          bgcolor:
-                            message.sender === "user"
-                              ? "primary.main"
-                              : "secondary.main",
-                          color:
-                            message.sender === "user"
-                              ? "common.white"
-                              : "common.black",
-                          mb: 1,
-                        }}
-                      >
-                        <CardContent>
-                          <Typography variant="body1">
-                            {message.content}
-                          </Typography>
-                        </CardContent>
-                      </Card>
-                    </Box>
-                  ))}
-                </Box>
-              </Paper>
-              <Box
-                component="form"
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  mt: 2,
-                }}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  sendMessage();
-                }}
-              >
-                <TextField
-                  fullWidth
-                  label="Message"
-                  variant="outlined"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                />
-                <IconButton
-                  type="submit"
-                  color="primary"
-                  disabled={!input.trim()}
-                  sx={{ m1: 1 }}
-                >
-                  <SendIcon />
-                </IconButton>
-              </Box>
-            </Box>
+            <ChatBox messages={messages} onSendMessage={addMesssage} />
           </Grid>
-          <Grid item xs={12} md={9}></Grid>
+          {/* ... */}
         </Grid>
       </Box>
     </ThemeProvider>
