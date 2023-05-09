@@ -18,7 +18,8 @@
     "mermaid": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-mermaid2": "^0.1.4"
+    "react-mermaid2": "^0.1.4",
+    "react-zoom-pan-pinch": "^3.0.7"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
