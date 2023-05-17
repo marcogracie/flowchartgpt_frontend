@@ -71,7 +71,7 @@ function App() {
           <Grid item xs={12} md={3}>
             <ChatBox messages={messages} onSendMessage={addMesssage} />
           </Grid>
-          <Grid item xs={12} md={9} sx={{ height: '100%', overflow: 'auto' }}>
+          <Grid item xs={12} md={9} sx={{width: '75vw'}}>
             <MermaidComponent chart={chart} />
           </Grid>
         </Grid>
