@@ -1,9 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Grid } from "@mui/material";
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import TopBar from "./TopBar";
 import ChatBox from "./ChatBox";
 import MermaidComponent from "./MermaidComponent";
+import {initializeApp} from "firebase/app";
+import { getAuth, signInAnonymously } from "firebase/auth";
+import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA12HF8g1oae92jMhPLH5Gp2aAQu2tXfok",
+  authDomain: "flowchartgpt.firebaseapp.com",
+  projectId: "flowchartgpt",
+  storageBucket: "flowchartgpt.appspot.com",
+  messagingSenderId: "904320356478",
+  appId: "1:904320356478:web:d5b48662336e770467c82f",
+  measurementId: "G-X326FRFWGL",
+};
+
+const app = initializeApp(firebaseConfig);
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -35,9 +50,35 @@ function App() {
   Sleep --> Start
 `);
 
-  const addMesssage = (newMessage) => {
-    setMessages([...messages, { sender: "user", content: newMessage }]);
+  useEffect(() => {
+    const auth = getAuth(app);
+
+    signInAnonymously(auth).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // Handle Errors here.
+    });
+
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        console.log("User is signed in with uid:", user.uid);
+      } else {
+        console.log("No user is signed in.");
+      }
+    });
+  }, []);
+
+  const db = getFirestore(app);
+
+  const addMessage = async (message) => {
+    const {userId, id, content, sender, timestamp} = message;
+    await setDoc(doc(collection(db, `users/${userId}/messages`), id), {
+      content,
+      sender,
+      timestamp,
+    });
   };
+  
 
   const toggleDarkMode = () => setDarkMode(!darkMode);
 
@@ -55,9 +96,9 @@ function App() {
           display: "flex",
           flexDirection: "column",
           minHeight: "100vh",
-          maxHeight: "100vh",  // Set a maximum height
+          maxHeight: "100vh", // Set a maximum height
           bgcolor: (theme) => theme.palette.background.default,
-          overflow: "hidden",  // Prevent overflow
+          overflow: "hidden", // Prevent overflow
         }}
       >
         {" "}
@@ -65,13 +106,15 @@ function App() {
         <Grid
           container
           sx={{
-            height: "calc(100vh - 56px)", p: 2, overflow: "hidden"
+            height: "calc(100vh - 56px)",
+            p: 2,
+            overflow: "hidden",
           }}
         >
           <Grid item xs={12} md={3}>
-            <ChatBox messages={messages} onSendMessage={addMesssage} />
+            <ChatBox messages={messages} onSendMessage={addMessage} />
           </Grid>
-          <Grid item xs={12} md={9} sx={{width: '75vw'}}>
+          <Grid item xs={12} md={9} sx={{ width: "75vw" }}>
             <MermaidComponent chart={chart} />
           </Grid>
         </Grid>

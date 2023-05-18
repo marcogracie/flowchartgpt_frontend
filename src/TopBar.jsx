@@ -32,6 +32,7 @@ const CustomToggle = styled("div")({
     backgroundColor: "white",
     boxShadow: "none",
     position: "absolute",
+    transition: "left 0.3s ease"
   });
   
   function DarkModeToggle({ darkMode, toggleDarkMode }) {
