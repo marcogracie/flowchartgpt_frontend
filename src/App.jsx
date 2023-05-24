@@ -4,21 +4,11 @@ import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import TopBar from "./TopBar";
 import ChatBox from "./ChatBox";
 import MermaidComponent from "./MermaidComponent";
-import {initializeApp} from "firebase/app";
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { collection, doc, getFirestore, setDoc } from "firebase/firestore";
+import app from './Firebase';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA12HF8g1oae92jMhPLH5Gp2aAQu2tXfok",
-  authDomain: "flowchartgpt.firebaseapp.com",
-  projectId: "flowchartgpt",
-  storageBucket: "flowchartgpt.appspot.com",
-  messagingSenderId: "904320356478",
-  appId: "1:904320356478:web:d5b48662336e770467c82f",
-  measurementId: "G-X326FRFWGL",
-};
 
-const app = initializeApp(firebaseConfig);
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
